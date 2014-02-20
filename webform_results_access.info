@@ -1,0 +1,6 @@
+; $Id: $
+name = Webform Results Access
+description = Allow node specific results access for Webforms
+core = 7.x
+package = Webform
+php = 5.3
