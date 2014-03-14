@@ -31,7 +31,7 @@ function webform_results_access_webform_access ($node, $account = NULL) {
   global $user;
   $account = isset($account) ? $account : $user;
   $access = false;
-  if (isset($node->field_webform_results_access['und'][0]['uid'])) { // Drupal 6
+  if (isset($node->field_webform_results_access)) {
     // This webform has user(s) specified for submission results access control.
     if (user_access("administer nodes") || user_access("edit any webform content")) {
       $access = true;
@@ -39,8 +39,14 @@ function webform_results_access_webform_access ($node, $account = NULL) {
     else {
       // For each user specified, make sure the current user is one of them,
       // otherwise don't show the results.
-      foreach ($node->field_webform_results_access['und'] as $i => $user_reference) {
-        if ($user_reference['uid'] == $account->uid) {
+      foreach ($node->field_webform_results_access['und'] as $i => $ref) {
+	// User Reference
+        if (isset($ref['uid']) && (($ref['uid'] == $account->uid))) {
+          $access = true;
+          break;
+        }
+	// Entity Reference
+        if (isset($ref['target_id']) && (($ref['target_id'] == $account->uid))) {
           $access = true;
           break;
         }
